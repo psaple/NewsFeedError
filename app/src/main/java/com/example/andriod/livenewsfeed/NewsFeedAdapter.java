@@ -9,7 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.util.Date;
+
 import java.util.List;
+import java.text.SimpleDateFormat;
 
 public class NewsFeedAdapter extends ArrayAdapter<NewsFeed> {
 
@@ -34,18 +38,34 @@ public class NewsFeedAdapter extends ArrayAdapter<NewsFeed> {
         }
         //Find the news at the given position in the list of News
         NewsFeed currentNewsFeed = getItem(position);
+
         //Find the text view with View ID webPublicationDate
         TextView webPublicationDateView = (TextView) listItemView.findViewById(R.id.webPublicationDate);
-        webPublicationDateView.setText(currentNewsFeed.getWebPublicationDate());
+        String dateStr = currentNewsFeed.getWebPublicationDate().substring(0,10);
+        SimpleDateFormat dateObj = new SimpleDateFormat("yyyy-mm-dd");
+        Date date = null;
+        try {
+            date = dateObj.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        dateObj = new SimpleDateFormat("MMM dd, yyyy");
+        String FormatedDateString = dateObj.format(date);
+        webPublicationDateView.setText(FormatedDateString);
 
         //Find the text view with View ID webTitle
         TextView webTitleView = (TextView) listItemView.findViewById(R.id.webTitle);
         webTitleView.setText(currentNewsFeed.getWebTitle());
 
-        //Find the text view with View ID webURL
-        TextView webURLView = (TextView) listItemView.findViewById(R.id.webURL);
-        webURLView.setText(currentNewsFeed.getWebURL());
+        //Find the text view with View ID SectionName
+        TextView webSectionNameView = (TextView) listItemView.findViewById(R.id.webSectionName);
+        webSectionNameView.setText(currentNewsFeed.getWebSectionName());
+
+        //Find the text view with View ID AuthorName
+        TextView AuthorNameView = (TextView) listItemView.findViewById(R.id.AuthorName);
+        AuthorNameView.setText(currentNewsFeed.getAuthorName());
 
         return listItemView;
     }
 }
+
